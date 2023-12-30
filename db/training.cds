@@ -2,7 +2,8 @@ namespace com.training;
 
 using {
     cuid,
-    managed
+    managed,
+    Country
 } from '@sap/cds/common';
 
 
@@ -70,12 +71,13 @@ entity StudentCourse : cuid {
 }
 
 entity Orders {
-    ClientEmail : String(65);
-    FirstName   : String(30);
-    LastName    : String(30);
-    CreatedOn   : Date;
-    Reviewed    : Boolean;
-    Approved    : Boolean;
+    key ClientEmail : String(65);
+        FirstName   : String(30);
+        LastName    : String(30);
+        CreatedOn   : Date;
+        Reviewed    : Boolean;
+        Approved    : Boolean;
+        Country     : Country;
 }
 
 

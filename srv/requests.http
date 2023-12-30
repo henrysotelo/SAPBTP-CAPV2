@@ -23,3 +23,6 @@ Content-Type: application/json
 
 ### Delete Order
 DELETE http://localhost:4004/odata/v4/manage-orders/DeleteOrder('client1@client1.com')
+
+### Get Customer Rate - 
+get http://localhost:4004/odata/v4/manage-orders/getClientTaxRate(clientEmail='client2@client2.com')

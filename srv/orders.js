@@ -3,103 +3,125 @@ const { Orders } = cds.entities("com.training");
 
 module.exports = (srv) => {
 
-//Read
-srv.on("READ", "GetOrders", async (req) => {
+    //Read
+    srv.on("READ", "GetOrders", async (req) => {
 
-    if(req.data.ClientEmail !== undefined){
-        return await SELECT.from `com.training.Orders`.where`ClientEmail = ${req.data.ClientEmail}`;
-    }
-    return await SELECT.from(Orders);
-} );
-
-
-srv.after("READ", "GetOrders", (data) => { 
-   return data.map((order) => (order.Reviewed = true));
-});
-
-
-//Create
-srv.on("CREATE", "CreateOrder", async (req) => {
-   let returnData = await cds.transaction(req).run( INSERT.into(Orders).entities({
-        ClientEmail :   req.data.ClientEmail,
-        FirstName   :   req.data.FirstName,
-        LastName    :   req.data.LastName,
-        CreatedOn   :   req.data.CreatedOn,
-        Reviewed    :   req.data.Reviewed,
-        Approved    :   req.data.Approved,
-    }) 
-    ).then((resolve, reject) => { 
-        console.log("Resolve", resolve);
-        console.log("Reject", reject);
-
-        if (typeof resolve !== "undefined"){
-            return req.data;
-        } else {
-           req.error(409, "Record Not Inserted");
+        if (req.data.ClientEmail !== undefined) {
+            return await SELECT.from`com.training.Orders`.where`ClientEmail = ${req.data.ClientEmail}`;
         }
-
-    }).catch((err) => {
-        console.log(err);
-        req.error(err.code, err.message);
+        return await SELECT.from(Orders);
     });
-    console.log("Before End", returnData);
-return returnData;
-});
 
 
-srv.before("CREATE", "CreateOrder", (req) => {
-    req.data.CreatedOn = new Date().toISOString().slice(0,10);
-    return req;
-});
+    srv.after("READ", "GetOrders", (data) => {
+        return data.map((order) => (order.Reviewed = true));
+    });
 
 
-//Update
-srv.on("UPDATE", "UpdateOrder", async (req) => {
-  let returnData = await cds.transaction(req).run(
-    [
-        UPDATE(Orders, req.data.ClientEmail).set({
-            FirstName   :   req.data.FirstName,
-            LastName    :   req.data.LastName,
+    //Create
+    srv.on("CREATE", "CreateOrder", async (req) => {
+        let returnData = await cds.transaction(req).run(INSERT.into(Orders).entities({
+            ClientEmail: req.data.ClientEmail,
+            FirstName: req.data.FirstName,
+            LastName: req.data.LastName,
+            CreatedOn: req.data.CreatedOn,
+            Reviewed: req.data.Reviewed,
+            Approved: req.data.Approved,
         })
-    ]
-   ).then((resolve, reject) => {
-      console.log("Resolve", resolve);
-      console.log("Reject", reject);
+        ).then((resolve, reject) => {
+            console.log("Resolve", resolve);
+            console.log("Reject", reject);
 
-        if(resolve[0] == 0){
-            req.error(409, "Record Not Found");
-        };
+            if (typeof resolve !== "undefined") {
+                return req.data;
+            } else {
+                req.error(409, "Record Not Inserted");
+            }
 
-   }).catch((err)=>{
-    console.log(err);
-    req.error(err.code, err.message);
-   });
-   console.log("Before end", returnData );
-   return returnData;
-});
+        }).catch((err) => {
+            console.log(err);
+            req.error(err.code, err.message);
+        });
+        console.log("Before End", returnData);
+        return returnData;
+    });
 
 
-//Delete
-srv.on("DELETE", "DeleteOrder", async (req) => {
+    srv.before("CREATE", "CreateOrder", (req) => {
+        req.data.CreatedOn = new Date().toISOString().slice(0, 10);
+        return req;
+    });
 
-   let returnData = await cds.transaction(req).run(
-        DELETE.from(Orders).where({
-          ClientEmail :   req.data.ClientEmail,  
-        })
-    ).then((resolve, reject) => {
-        console.log("Resolve", resolve);
-        console.log("Reject", reject);
 
-      if(resolve !== 1){
-            req.error(409, "Record Not Found");
+    //Update
+    srv.on("UPDATE", "UpdateOrder", async (req) => {
+        let returnData = await cds.transaction(req).run(
+            [
+                UPDATE(Orders, req.data.ClientEmail).set({
+                    FirstName: req.data.FirstName,
+                    LastName: req.data.LastName,
+                })
+            ]
+        ).then((resolve, reject) => {
+            console.log("Resolve", resolve);
+            console.log("Reject", reject);
+
+            if (resolve[0] == 0) {
+                req.error(409, "Record Not Found");
+            };
+
+        }).catch((err) => {
+            console.log(err);
+            req.error(err.code, err.message);
+        });
+        console.log("Before end", returnData);
+        return returnData;
+    });
+
+
+    //Delete
+    srv.on("DELETE", "DeleteOrder", async (req) => {
+
+        let returnData = await cds.transaction(req).run(
+            DELETE.from(Orders).where({
+                ClientEmail: req.data.ClientEmail,
+            })
+        ).then((resolve, reject) => {
+            console.log("Resolve", resolve);
+            console.log("Reject", reject);
+
+            if (resolve !== 1) {
+                req.error(409, "Record Not Found");
+            }
+
+        }).catch((err) => {
+            console.log(err);
+            req.error(err.code, err.message);
+
+        });
+        console.log("Before End", returnData);
+        return await returnData;
+    });
+
+
+    //Function
+    srv.on("getClientTaxRate", async (req) => {
+        //No server side-effect
+        const { clientEmail } = req.data;
+        const db = srv.transaction(req);
+
+        const result =
+            await db.read(Orders, ["Country_code"]).where({ ClientEmail: clientEmail });
+
+        console.log(result[0]);
+
+        switch (result[0].Country_code) {
+            case 'ES':
+                return 21.5;
+            case 'UK':
+                return 24.6;
+            default:
+                break;
         }
-
-    }).catch( (err) => {
-        console.log(err);
-        req.error(err.code, err.message);
-        
     });
-    console.log("Before End", returnData);
-    return await returnData;
-   });
 };
