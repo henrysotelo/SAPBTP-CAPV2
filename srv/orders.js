@@ -124,4 +124,38 @@ module.exports = (srv) => {
                 break;
         }
     });
+
+    //Action 
+    srv.on("cancelOrder", async (req) => {
+        const { clientEmail } = req.data;
+        const db = srv.transaction(req);
+
+        const resultsRead = 
+            await db.read(Orders, ["FirstName", "LastName", "Approved"])
+                    .where({ ClientEmail: clientEmail });
+
+        let returnOrder = {
+            status : "",
+            message : ""
+        };
+
+        console.log(clientEmail);
+        console.log(resultsRead);
+        
+        if(resultsRead[0].Approved == false ) {
+            const resultsUpdate 
+            = await db.update(Orders).set({Status : 'C'}).where({ClientEmail: clientEmail});
+
+            returnOrder.status = "Succeeded";    
+            returnOrder.message 
+                = `The order placed by ${resultsRead[0].FirstName} ${resultsRead[0].LastName} whas canceled`;      
+        } else{
+
+            returnOrder.status = "Failed";    
+            returnOrder.message 
+                = `The order placed by ${resultsRead[0].FirstName} ${resultsRead[0].LastName} whas Not  canceled becouse was alrealdy approved`;      
+        }
+        console.log("Action cancelOrder executed");
+        return returnOrder;
+    });
 };

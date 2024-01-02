@@ -1,7 +1,7 @@
 
 //GET http://localhost:4004/odata/v4/manage-orders/GetOrders
 
-GET http://localhost:4004/odata/v4/manage-orders/GetOrders('client1@client1.com')
+GET http://localhost:4004/odata/v4/manage-orders/GetOrders('client2@client2.com')
 
 ### Create Order
 POST http://localhost:4004/odata/v4/manage-orders/CreateOrder HTTP/1.1
@@ -26,3 +26,12 @@ DELETE http://localhost:4004/odata/v4/manage-orders/DeleteOrder('client1@client1
 
 ### Get Customer Rate - 
 get http://localhost:4004/odata/v4/manage-orders/getClientTaxRate(clientEmail='client2@client2.com')
+
+
+### Cancel Order - Action
+POST  http://localhost:4004/odata/v4/manage-orders/cancelOrder
+Content-Type: application/json
+
+{
+   "clientEmail" : "client1@client1.com"     
+}

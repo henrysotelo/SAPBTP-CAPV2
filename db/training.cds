@@ -78,6 +78,7 @@ entity Orders {
         Reviewed    : Boolean;
         Approved    : Boolean;
         Country     : Country;
+        Status      : String(1);
 }
 
 
