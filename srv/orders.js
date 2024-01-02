@@ -3,6 +3,11 @@ const { Orders } = cds.entities("com.training");
 
 module.exports = (srv) => {
 
+    srv.before("*", (req) => {
+        console.log(`Method: ${req.method}`);
+        console.log(`Method: ${req.target}`);
+    });
+
     //Read
     srv.on("READ", "GetOrders", async (req) => {
 

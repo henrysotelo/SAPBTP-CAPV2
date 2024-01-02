@@ -35,3 +35,21 @@ Content-Type: application/json
 {
    "clientEmail" : "client1@client1.com"     
 }
+
+
+
+
+
+
+
+### Get Customer Rate 
+get http://localhost:4004/odata/v4/manage-orders/Orders('client1@client1.com')/ManageOrders.getClientTaxRate(clientEmail='client2@client2.com')
+
+
+### Cancel Order - Action
+POST  http://localhost:4004/odata/v4/manage-orders/Orders('client1@client1.com')/ManageOrders.cancelOrder
+Content-Type: application/json
+
+{
+   "clientEmail" : "client1@client1.com"     
+}
