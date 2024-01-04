@@ -6,6 +6,8 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "@sap-cloud-sdk/http-client": "^3.9.0",
+    "@sap-cloud-sdk/resilience": "^3.9.0",
     "@sap/cds": "^7",
     "cors": "^2.8.5",
     "express": "^4"
@@ -15,5 +17,18 @@
   },
   "scripts": {
     "start": "cds watch"
+  },
+  "cds": {
+    "requires": {
+      "sapbackend": {
+        "kind": "odata-v2",
+        "model": "srv/external/sapbackend",
+        "credentials": {
+          "requestTimeout": 30000,
+          "url": "http://erp13.sap4practice.com:9037/sap/opu/odata/sap/YSAPUI5_SRV_01",
+          "authentication": "NoAuthentication"
+        }
+      }
+    }
   }
 }
