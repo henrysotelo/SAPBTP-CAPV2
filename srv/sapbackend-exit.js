@@ -43,6 +43,6 @@ module.exports = async (srv) => {
         } else{
             incidents[0] = incident;
         }
-        return incidents;
+        return incidents;q
     });
 };
