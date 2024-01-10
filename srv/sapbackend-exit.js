@@ -33,7 +33,7 @@ module.exports = async (srv) => {
         let incident = await sapbackend.tx(req).send({
             query: IncidentsQuery,
             headers : {
-                Authorization : "Basic c2FwdWk1OnNhcHVpNQ=="
+                Authorization : `${process.env.SAP_GATEWAY_AUTH}`,
             }
         });
 
@@ -43,6 +43,6 @@ module.exports = async (srv) => {
         } else{
             incidents[0] = incident;
         }
-        return incidents;q
+        return incidents;
     });
 };

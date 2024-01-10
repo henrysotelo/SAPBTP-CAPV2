@@ -9,4 +9,9 @@ cds.on("bootstrap", (app) => {
         res.status(200).send("Server is Alive");
     });
 });
+
+    if (process.env.NODE_ENV !== "production"){
+        require("dotenv").config();
+    }
+
 module.exports = cds.server;
