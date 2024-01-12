@@ -34,10 +34,14 @@ context materials {
         Currency         : Association to Currencies;
         DimensionUnit    : Association to DimensionUnits;
         Category         : Association to Categories;
+
         SalesData        : Association to many sales.SalesData
                                on SalesData.Product = $self;
+
         Reviews          : Association to many ProductReview
                                on Reviews.Product = $self;
+
+        StockAvailability: Association to StockAvailability;
     }
 
     entity Categories {

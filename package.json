@@ -21,11 +21,12 @@
     "@cap-js/sqlite": "^1"
   },
   "scripts": {
-    "start": "cds watch"
+    "start": "cds watch",
+    "watch-product": "cds watch --open product/webapp/index.html?sap-ui-xx-viewCache=false"
   },
   "cds": {
     "features": {
-      "graphql" : true 
+      "graphql": true
     },
     "requires": {
       "sapbackend": {
@@ -38,5 +39,8 @@
         }
       }
     }
-  }
+  },
+  "sapux": [
+    "app/product"
+  ]
 }

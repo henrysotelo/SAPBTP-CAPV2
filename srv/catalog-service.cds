@@ -43,10 +43,10 @@ define service CatalogService {
             DimensionUnit as ToDimensionUnit,
             SalesData,
             Supplier,
-            Reviews
+            Reviews,
         // Rating,
-        // StockAvailability,
-        // ToStockAvailibilty
+            StockAvailability,
+        //  ToStockAvailibilty
         };
 
     @readonly
