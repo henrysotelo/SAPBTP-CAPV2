@@ -39,9 +39,7 @@ context materials {
                                on SalesData.Product = $self;
 
         Reviews          : Association to many ProductReview
-                               on Reviews.Product = $self;
-
-        StockAvailability: Association to StockAvailability;
+                               on Reviews.Product = $self
     }
 
     entity Categories {

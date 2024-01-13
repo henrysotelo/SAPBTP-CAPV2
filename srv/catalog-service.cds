@@ -38,15 +38,16 @@ define service CatalogService {
             ),
             UnitOfMeasure as ToUnitOfMeasure @mandatory,
             Currency      as ToCurrency      @mandatory,
+            Currency.ID   as CurrencyId,
             Category      as ToCategory      @mandatory,
+            Category.ID   as CategoryId,
             Category.Name as Category        @readonly,
             DimensionUnit as ToDimensionUnit,
             SalesData,
             Supplier,
-            Reviews,
-        // Rating,
-            StockAvailability,
-        //  ToStockAvailibilty
+            //Rating,
+            //StockAvailability,
+            //ToStockAvailibilty
         };
 
     @readonly
